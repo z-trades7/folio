@@ -4,4 +4,30 @@
 .Spotlight-V100
 .Trashes
 ehthumbs.db
-Thumbs.db 
+Thumbs.db
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+
+# Stock Data System - Database and data files
+stock_data_system/data/*.db
+stock_data_system/data/*.json
+project_pages/stock_data.json
+
+# Revenue Model - Data files
+revenue_model/data/
+revenue_model/*.png
+revenue_model/*.html
+
+# Excel and CSV files (personal data)
+*.xlsx
+*.csv
+
+# Large image files
+headshot.jpg 

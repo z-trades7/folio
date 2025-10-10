@@ -1,0 +1,460 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>NVIDIA Revenue Forecasting Dashboard</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            color: #E8E8E8;
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        .dashboard-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .dashboard-header {
+            text-align: center;
+            padding: 3rem 2rem;
+            margin-bottom: 3rem;
+            background: rgba(42, 42, 42, 0.8);
+            border-radius: 15px;
+            border: 1px solid #C0C0C0;
+        }
+        
+        .dashboard-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #999, #fff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .dashboard-header p {
+            color: #C0C0C0;
+            font-size: 1.1rem;
+        }
+        
+        .chart-section {
+            margin-bottom: 5rem;
+            background: rgba(42, 42, 42, 0.9);
+            padding: 2.5rem;
+            border-radius: 15px;
+            border: 1px solid #444;
+        }
+        
+        .chart-title {
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            color: #E8E8E8;
+            font-weight: bold;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #C0C0C0;
+        }
+        
+        .chart-container {
+            min-height: 600px;
+            margin: 2rem 0;
+            background: #2a2a2a;
+            border-radius: 10px;
+            padding: 1rem;
+        }
+        
+        .interpretation {
+            background: rgba(26, 26, 26, 0.6);
+            padding: 1.5rem;
+            border-radius: 10px;
+            border-left: 4px solid #C0C0C0;
+            margin-top: 2rem;
+            line-height: 1.8;
+        }
+        
+        .interpretation h3 {
+            color: #C0C0C0;
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+        }
+        
+        .interpretation h4 {
+            color: #E8E8E8;
+            font-size: 1.1rem;
+            margin-top: 1.5rem;
+            margin-bottom: 0.8rem;
+        }
+        
+        .interpretation p {
+            color: #E8E8E8;
+            margin-bottom: 1rem;
+        }
+        
+        .methodology {
+            background: rgba(52, 152, 219, 0.1);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            border: 1px solid rgba(52, 152, 219, 0.3);
+        }
+        
+        .back-button {
+            display: inline-block;
+            margin: 3rem 0;
+            padding: 12px 30px;
+            background: linear-gradient(45deg, #333, #444);
+            color: #E8E8E8;
+            text-decoration: none;
+            border-radius: 25px;
+            border: 1px solid #C0C0C0;
+            transition: all 0.3s ease;
+            font-size: 1.1rem;
+        }
+        
+        .back-button:hover {
+            background: linear-gradient(45deg, #999, #fff);
+            color: #333;
+            transform: translateY(-2px);
+        }
+        
+        @media (max-width: 768px) {
+            .dashboard-header h1 {
+                font-size: 1.8rem;
+            }
+            .chart-section {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-brand"></div>
+        <div class="mobile-menu-toggle">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <ul class="nav-links">
+            <li><a href="../index.html">Home</a></li>
+            <li><a href="../index.html#about">About</a></li>
+            <li><a href="../index.html#projects">Projects</a></li>
+            <li><a href="../index.html#contact">Contact</a></li>
+        </ul>
+    </nav>
+
+    <div class="dashboard-container">
+        <div class="dashboard-header">
+            <h1><i class="fas fa-chart-line"></i> NVIDIA Revenue Forecasting Dashboard</h1>
+            <p>Multi-Model Predictive Analysis | 2016-2030</p>
+        </div>
+
+        <!-- Chart 1: Scenario Analysis -->
+        <div class="chart-section">
+            <h2 class="chart-title">Scenario Analysis: Bull, Base & Bear Cases</h2>
+            <div id="chart1" class="chart-container"></div>
+            
+            <div class="interpretation">
+                <h3><i class="fas fa-lightbulb"></i> Interpretation</h3>
+                <p>This chart presents three distinct revenue trajectories for NVIDIA through 2030, each representing fundamentally different technological and market outcomes. The historical data (2016-2025) shows NVIDIA's explosive growth from $5B to $131B, driven primarily by the AI revolution.</p>
+                
+                <h4>Bear Case ($480B by 2030 | 30% CAGR):</h4>
+                <p>Assumes AI technology is reaching its law of diminishing returns. As the market matures, growth rates decline from current levels due to several factors: early adopters have completed their AI infrastructure investments, competition from AMD, Intel, and custom chips intensifies, and pricing pressure emerges as the technology commoditizes. This scenario reflects natural market saturation where exponential growth transitions to more sustainable linear expansion.</p>
+                
+                <h4>Base Case ($1,350B by 2030 | 60% CAGR):</h4>
+                <p>Represents steady, sustained AI adoption across industries without dramatic acceleration or deceleration. This balanced view assumes continued data center expansion, growth in edge computing, automotive AI applications, and NVIDIA maintaining competitive advantages while facing realistic market pressures. This scenario accounts for both opportunities and challenges in a maturing AI market.</p>
+                
+                <h4>Bull Case ($4,392B by 2030 | 102% CAGR):</h4>
+                <p>Assumes quantum computing will exponentially boost NVIDIA's revenue by enabling breakthrough applications impossible with classical computing. This paradigm shift would create entirely new markets in drug discovery, financial modeling, cryptography, and AI model training. NVIDIA's expertise in parallel processing and AI acceleration positions it as critical infrastructure for quantum-classical hybrid computing, capturing significant market share in this emerging multi-trillion dollar opportunity.</p>
+                
+                <div class="methodology">
+                    <strong><i class="fas fa-cog"></i> Methodology:</strong> Growth rate-based forecasting using historical volatility analysis and Monte Carlo-derived growth parameters. Each scenario applies different CAGR assumptions to the 2025 baseline revenue of $130.5B, compounded annually through 2030.
+                </div>
+            </div>
+        </div>
+
+        <!-- Chart 2: Monte Carlo Simulation -->
+        <div class="chart-section">
+            <h2 class="chart-title">Monte Carlo Simulation: Probabilistic Forecast</h2>
+            <div id="chart2" class="chart-container"></div>
+            
+            <div class="interpretation">
+                <h3><i class="fas fa-lightbulb"></i> Interpretation</h3>
+                <p>This probabilistic forecast uses 1,000 Monte Carlo simulations to quantify uncertainty and generate confidence intervals around revenue projections. Unlike single-point forecasts, this approach acknowledges that future outcomes exist within a range of possibilities influenced by numerous random variables.</p>
+                
+                <h4>Key Probabilistic Outcomes for 2030:</h4>
+                <p><strong>P10 (10th Percentile - $263B):</strong> Represents the pessimistic boundary where only 10% of scenarios result in lower revenue. This conservative outcome suggests significant headwinds materialized.</p>
+                
+                <p><strong>Median (50th Percentile - $784B):</strong> The most statistically likely outcome where half of simulations exceed this value and half fall below. This represents the balanced expectation incorporating historical volatility patterns.</p>
+                
+                <p><strong>P90 (90th Percentile - $1,793B):</strong> The optimistic boundary where 90% of scenarios fall below this level. Achieving this outcome would require sustained exceptional growth with minimal setbacks.</p>
+                
+                <p><strong>80% Confidence Band (P10-P90):</strong> Statistical confidence that actual 2030 revenue will fall within this range, assuming historical volatility patterns persist and no fundamental market structure changes occur.</p>
+                
+                <div class="methodology">
+                    <strong><i class="fas fa-cog"></i> Methodology:</strong> Monte Carlo simulation sampling from a normal distribution with mean growth rate (μ = 49.6%) and standard deviation (σ = 67.4%) derived from historical revenue data. Each of 1,000 iterations randomly samples annual growth rates for 5 years, compounding from the 2025 base. Percentiles calculated from the resulting distribution.
+                </div>
+            </div>
+        </div>
+
+        <!-- Chart 3: Multi-Model Comparison -->
+        <div class="chart-section">
+            <h2 class="chart-title">Multi-Model Forecast Comparison</h2>
+            <div id="chart3" class="chart-container"></div>
+            
+            <div class="interpretation">
+                <h3><i class="fas fa-lightbulb"></i> Interpretation</h3>
+                <p>This chart compares nine distinct forecasting methodologies, each applying different mathematical assumptions to predict future revenue. The diversity of approaches provides perspective on model sensitivity and forecast robustness.</p>
+                
+                <h4>Key Model Categories:</h4>
+                <p><strong>Machine Learning Models (Gradient Boosting, Random Forest):</strong> Achieved the best training performance with Gradient Boosting showing 0.03% MAPE. These ensemble methods capture non-linear patterns but may overfit to recent explosive growth, explaining their conservative forecasts around $130B.</p>
+                
+                <p><strong>Statistical Time Series (Exponential Smoothing):</strong> Applies adaptive weighting to recent observations with trend component. Produces moderate forecasts (~$478B by 2030) by smoothing volatility while maintaining growth momentum.</p>
+                
+                <p><strong>Polynomial Regression (degrees 2 & 3):</strong> Fits curves to historical data points. Higher-degree polynomials capture recent acceleration better, projecting more aggressive growth ($808B for degree 3) but risk overfitting to tail-end behavior.</p>
+                
+                <p><strong>Linear Regression:</strong> Assumes constant absolute growth rate. The most conservative approach ($125B) as it cannot capture exponential acceleration patterns evident in NVIDIA's recent performance.</p>
+                
+                <p><strong>Ensemble Forecast (white dashed line - $316B):</strong> Averages predictions from Polynomial degree 2, Exponential Smoothing, and Gradient Boosting to balance optimism and conservatism, reducing individual model bias.</p>
+                
+                <div class="methodology">
+                    <strong><i class="fas fa-cog"></i> Methodology:</strong> Multiple regression techniques applied to historical revenue time series. ML models use scikit-learn implementations with default hyperparameters. Statistical models use statsmodels. All models trained on 2016-2025 data (10 observations), evaluated using MAE, RMSE, MAPE, and R² metrics. Ensemble combines three best-performing diverse models using simple averaging.
+                </div>
+            </div>
+        </div>
+
+        <!-- Chart 4: Model Performance -->
+        <div class="chart-section">
+            <h2 class="chart-title">Model Performance Metrics</h2>
+            <div id="chart4" class="chart-container"></div>
+            
+            <div class="interpretation">
+                <h3><i class="fas fa-lightbulb"></i> Interpretation</h3>
+                <p>Mean Absolute Percentage Error (MAPE) measures average forecast accuracy on training data, with lower values indicating better historical fit. This chart reveals critical insights about model behavior and reliability.</p>
+                
+                <h4>Performance Analysis:</h4>
+                <p><strong>Gradient Boosting (0.03% MAPE):</strong> Near-perfect training fit suggests potential overfitting. While technically superior on historical data, this model may not generalize well to unprecedented future scenarios, explaining its conservative forecasts.</p>
+                
+                <p><strong>Random Forest (9.5% MAPE):</strong> Strong performance with better generalization than Gradient Boosting. The ensemble nature provides robustness but still struggles with explosive recent growth patterns.</p>
+                
+                <p><strong>Exponential Smoothing (21.8% MAPE):</strong> Moderate accuracy reflects the challenge of capturing both steady growth (2016-2023) and explosive acceleration (2024-2025) in a single model.</p>
+                
+                <p><strong>Polynomial Models (35-65% MAPE):</strong> Higher error rates from attempting to fit complex curves to limited data points. Degree 3 outperforms degree 2 by better capturing recent acceleration.</p>
+                
+                <p><strong>Linear Regression (109% MAPE):</strong> Poor fit confirms NVIDIA's growth is fundamentally non-linear. This model's failure validates the need for more sophisticated approaches.</p>
+                
+                <div class="methodology">
+                    <strong><i class="fas fa-cog"></i> Methodology:</strong> MAPE calculated as mean(|actual - predicted| / actual) × 100 on training period (2016-2025). Lower MAPE indicates better historical fit but doesn't guarantee future accuracy. Models with MAPE < 10% show excellent training performance, 10-25% good, 25-50% acceptable, >50% poor fit. Overfitting risk increases as MAPE approaches zero.
+                </div>
+            </div>
+        </div>
+
+        <a href="predictive-revenue-model.html" class="back-button">
+            <i class="fas fa-arrow-left"></i> Back to Project Details
+        </a>
+    </div>
+
+    <script src="../script.js"></script>
+    <script>
+        // Chart 1: Scenario Analysis
+        const chart1Data = [
+            {
+                x: [2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025],
+                y: [5.01, 6.91, 9.714, 11.716, 10.918, 16.675, 26.914, 26.974, 60.922, 130.497],
+                mode: 'lines+markers',
+                name: 'Historical',
+                line: {color: '#3498DB', width: 4},
+                marker: {size: 12, line: {width: 2, color: 'white'}},
+                hovertemplate: '<b>%{x}</b><br>Revenue: $%{y:.1f}B<extra></extra>'
+            },
+            {
+                x: [2026, 2027, 2028, 2029, 2030],
+                y: [263.6360710265232, 532.6097760584687, 1076.0028870423923, 2173.790765711489, 4391.59257841877],
+                mode: 'lines+markers',
+                name: 'Bull Case (Quantum Computing)',
+                line: {color: '#27AE60', width: 4},
+                marker: {size: 10},
+                hovertemplate: '<b>Bull Case</b><br>%{x}<br>$%{y:.1f}B<extra></extra>'
+            },
+            {
+                x: [2026, 2027, 2028, 2029, 2030],
+                y: [208.22359821028073, 332.2456979979342, 530.1378171683342, 845.8984025543458, 1349.732247486106],
+                mode: 'lines+markers',
+                name: 'Base Case (Steady Growth)',
+                line: {color: '#3498DB', width: 4},
+                marker: {size: 10},
+                hovertemplate: '<b>Base Case</b><br>%{x}<br>$%{y:.1f}B<extra></extra>'
+            },
+            {
+                x: [2026, 2027, 2028, 2029, 2030],
+                y: [169.36029910514037, 219.79747360462392, 285.2553382241224, 370.2072032535257, 480.4585750928726],
+                mode: 'lines+markers',
+                name: 'Bear Case (Diminishing Returns)',
+                line: {color: '#E74C3C', width: 4},
+                marker: {size: 10},
+                hovertemplate: '<b>Bear Case</b><br>%{x}<br>$%{y:.1f}B<extra></extra>'
+            }
+        ];
+
+        const chart1Layout = {
+            xaxis: {title: '<b>Year</b>', gridcolor: '#444', color: '#E8E8E8'},
+            yaxis: {title: '<b>Revenue ($B)</b>', gridcolor: '#444', color: '#E8E8E8'},
+            plot_bgcolor: '#2a2a2a',
+            paper_bgcolor: '#2a2a2a',
+            font: {family: 'Arial', size: 12, color: '#E8E8E8'},
+            showlegend: true,
+            legend: {bgcolor: '#2a2a2a', bordercolor: '#C0C0C0', borderwidth: 1},
+            hovermode: 'closest',
+            margin: {l: 80, r: 40, t: 40, b: 80}
+        };
+
+        Plotly.newPlot('chart1', chart1Data, chart1Layout, {responsive: true});
+
+        // Chart 2: Monte Carlo
+        const years = [2026, 2027, 2028, 2029, 2030];
+        const chart2Data = [
+            {
+                x: [2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025],
+                y: [5.01, 6.91, 9.714, 11.716, 10.918, 16.675, 26.914, 26.974, 60.922, 130.497],
+                mode: 'lines+markers',
+                name: 'Historical',
+                line: {color: '#3498DB', width: 4},
+                marker: {size: 12, line: {width: 2, color: 'white'}},
+                hovertemplate: '<b>%{x}</b><br>Revenue: $%{y:.1f}B<extra></extra>'
+            },
+            {
+                x: years,
+                y: [267.3665885235913, 461.213167296302, 780.2704608250405, 1235.2812314157713, 1952.6512664253507],
+                mode: 'lines',
+                name: 'P90 (Optimistic)',
+                line: {width: 0},
+                showlegend: true,
+                hovertemplate: '<b>%{x}</b><br>P90: $%{y:.1f}B<extra></extra>'
+            },
+            {
+                x: years,
+                y: [116.75810422742883, 131.91960820980168, 162.97673476656425, 202.7997141030184, 261.0721951438504],
+                mode: 'lines',
+                name: '80% Confidence (P10-P90)',
+                line: {width: 0},
+                fill: 'tonexty',
+                fillcolor: 'rgba(52, 152, 219, 0.3)',
+                hovertemplate: '<b>%{x}</b><br>P10: $%{y:.1f}B<extra></extra>'
+            },
+            {
+                x: years,
+                y: [191.8390344213765, 276.5325390802393, 405.4757220449518, 570.1651659560155, 825.1631286623419],
+                mode: 'lines+markers',
+                name: 'Median (P50)',
+                line: {color: '#E74C3C', width: 4},
+                marker: {size: 10},
+                hovertemplate: '<b>%{x}</b><br>Median: $%{y:.1f}B<extra></extra>'
+            }
+        ];
+
+        const chart2Layout = {
+            xaxis: {title: '<b>Year</b>', gridcolor: '#444', color: '#E8E8E8'},
+            yaxis: {title: '<b>Revenue ($B)</b>', gridcolor: '#444', color: '#E8E8E8'},
+            plot_bgcolor: '#2a2a2a',
+            paper_bgcolor: '#2a2a2a',
+            font: {family: 'Arial', size: 12, color: '#E8E8E8'},
+            showlegend: true,
+            legend: {bgcolor: '#2a2a2a', bordercolor: '#C0C0C0', borderwidth: 1},
+            hovermode: 'closest',
+            margin: {l: 80, r: 40, t: 40, b: 80}
+        };
+
+        Plotly.newPlot('chart2', chart2Data, chart2Layout, {responsive: true});
+
+        // Chart 3: Multi-Model Comparison
+        const ensemble = [157.72435179413864, 194.62973140643052, 233.26681808998694, 273.6356118435662, 315.73611266778914];
+        const ensemble_years = [2026, 2027, 2028, 2029, 2030];
+        
+        const chart3Data = [
+            {
+                x: [2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025],
+                y: [5.01, 6.91, 9.714, 11.716, 10.918, 16.675, 26.914, 26.974, 60.922, 130.497],
+                mode: 'lines+markers',
+                name: 'Historical',
+                line: {color: '#3498DB', width: 4},
+                marker: {size: 12, line: {width: 2, color: 'white'}},
+                hovertemplate: '<b>%{x}</b><br>Revenue: $%{y:.1f}B<extra></extra>'
+            },
+            {
+                x: ensemble_years,
+                y: ensemble,
+                mode: 'lines+markers',
+                name: 'Ensemble Forecast',
+                line: {color: 'white', width: 4, dash: 'dash'},
+                marker: {size: 10},
+                hovertemplate: '<b>Ensemble</b><br>%{x}<br>$%{y:.1f}B<extra></extra>'
+            }
+        ];
+        
+        // Add other models with opacity
+        const modelColors = ['#E74C3C', '#9B59B6', '#3498DB', '#1ABC9C', '#F39C12'];
+        let colorIdx = 0;
+        const modelsToShow = ['Polynomial_3', 'Exponential Smoothing', 'Random Forest', 'Gradient Boosting', 'Linear Regression'];
+        
+        chart3Data.push({x: [2026, 2027, 2028, 2029, 2030], y: [198.71008682250977, 301.0695037841797, 434.13001251220703, 601.8151550292969, 808.0484561920166], mode: 'lines', name: 'Polynomial_3', line: {width: 2}, opacity: 0.6, hovertemplate: '<b>Polynomial_3</b><br>%{x}<br>$%{y:.1f}B<extra></extra>'});
+chart3Data.push({x: [2026, 2027, 2028, 2029, 2030], y: [200.07199891231954, 269.6469983555227, 339.22199779872597, 408.79699724192915, 478.37199668513233], mode: 'lines', name: 'Exponential Smoothing', line: {width: 2}, opacity: 0.6, hovertemplate: '<b>Exponential Smoothing</b><br>%{x}<br>$%{y:.1f}B<extra></extra>'});
+chart3Data.push({x: [2026, 2027, 2028, 2029, 2030], y: [100.45651999999997, 100.45651999999997, 100.45651999999997, 100.45651999999997, 100.45651999999997], mode: 'lines', name: 'Random Forest', line: {width: 2}, opacity: 0.6, hovertemplate: '<b>Random Forest</b><br>%{x}<br>$%{y:.1f}B<extra></extra>'});
+chart3Data.push({x: [2026, 2027, 2028, 2029, 2030], y: [130.4924564794901, 130.4924564794901, 130.4924564794901, 130.4924564794901, 130.4924564794901], mode: 'lines', name: 'Gradient Boosting', line: {width: 2}, opacity: 0.6, hovertemplate: '<b>Gradient Boosting</b><br>%{x}<br>$%{y:.1f}B<extra></extra>'});
+chart3Data.push({x: [2026, 2027, 2028, 2029, 2030], y: [85.46226666666917, 95.43267878788174, 105.40309090909432, 115.37350303030325, 125.34391515151583], mode: 'lines', name: 'Linear Regression', line: {width: 2}, opacity: 0.6, hovertemplate: '<b>Linear Regression</b><br>%{x}<br>$%{y:.1f}B<extra></extra>'});
+        
+        const chart3Layout = {
+            xaxis: {title: '<b>Year</b>', gridcolor: '#444', color: '#E8E8E8'},
+            yaxis: {title: '<b>Revenue ($B)</b>', gridcolor: '#444', color: '#E8E8E8'},
+            plot_bgcolor: '#2a2a2a',
+            paper_bgcolor: '#2a2a2a',
+            font: {family: 'Arial', size: 12, color: '#E8E8E8'},
+            showlegend: true,
+            legend: {bgcolor: '#2a2a2a', bordercolor: '#C0C0C0', borderwidth: 1},
+            hovermode: 'closest',
+            margin: {l: 80, r: 40, t: 40, b: 80}
+        };
+
+        Plotly.newPlot('chart3', chart3Data, chart3Layout, {responsive: true});
+
+        // Chart 4: Model Performance
+        const metrics = {'MAE': {'Gradient Boosting': 0.0029042143176266854, 'Random Forest': 4.2711601000000075, 'Exponential Smoothing': 9.523700957398507, 'Polynomial (degree 3)': 5.781724560546877, 'Polynomial (degree 2)': 10.67434424056113, 'Linear Regression': 17.89069454545473}, 'RMSE': {'Gradient Boosting': 0.0036420015987671324, 'Random Forest': 9.703562361119147, 'Exponential Smoothing': 16.104808493184713, 'Polynomial (degree 3)': 6.544410823500147, 'Polynomial (degree 2)': 13.235959164200127, 'Linear Regression': 23.053181324901267}, 'MAPE': {'Gradient Boosting': 0.025762552734687943, 'Random Forest': 9.514964201205595, 'Exponential Smoothing': 21.842331734110676, 'Polynomial (degree 3)': 35.23191814731595, 'Polynomial (degree 2)': 65.10073055753747, 'Linear Regression': 109.4553537453598}, 'R²': {'Gradient Boosting': 0.9999999901861298, 'Random Forest': 0.9303337477527507, 'Exponential Smoothing': 0.8081016788908548, 'Polynomial (degree 3)': 0.9683115385339284, 'Polynomial (degree 2)': 0.8703803385998, 'Linear Regression': 0.6067925136036023}};
+        const modelNames = ['Gradient Boosting', 'Random Forest', 'Exponential Smoothing', 'Polynomial (degree 3)', 'Polynomial (degree 2)'];
+        const mapeValues = [0.025762552734687943, 9.514964201205595, 21.842331734110676, 35.23191814731595, 65.10073055753747];
+        
+        const chart4Data = [{
+            x: modelNames,
+            y: mapeValues,
+            type: 'bar',
+            marker: {
+                color: '#C0C0C0',
+                line: {color: 'white', width: 2}
+            },
+            hovertemplate: '<b>%{x}</b><br>MAPE: %{y:.2f}%<extra></extra>'
+        }];
+
+        const chart4Layout = {
+            xaxis: {title: '<b>Model</b>', tickangle: -45, gridcolor: '#444', color: '#E8E8E8'},
+            yaxis: {title: '<b>MAPE (%)</b>', gridcolor: '#444', color: '#E8E8E8'},
+            plot_bgcolor: '#2a2a2a',
+            paper_bgcolor: '#2a2a2a',
+            font: {family: 'Arial', size: 12, color: '#E8E8E8'},
+            showlegend: false,
+            hovermode: 'closest',
+            margin: {l: 80, r: 40, t: 40, b: 120}
+        };
+
+        Plotly.newPlot('chart4', chart4Data, chart4Layout, {responsive: true});
+    </script>
+</body>
+</html>

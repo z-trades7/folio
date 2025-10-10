@@ -2,7 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>Automated ETL Pipeline - Zach Lee</title>
     <link rel="stylesheet" href="../styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -48,23 +50,32 @@
             margin: 1.5rem 0;
         }
         
-        .project-tech img {
-            width: 35px;
-            height: 35px;
-            object-fit: contain;
-            padding: 5px;
-            background-color: transparent;
-            border-radius: 5px;
-            filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.3));
-            mix-blend-mode: lighten;
-            backdrop-filter: brightness(1.1);
-            transition: transform 0.2s;
+        .project-tech i {
+            font-size: 36px;
+            color: #E8E8E8;
+            background-color: #1a1a1a;
+            padding: 12px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
         }
         
-        .project-tech img:hover {
-            transform: scale(1.15);
-            box-shadow: 0 3px 6px rgba(192, 192, 192, 0.3);
-            filter: drop-shadow(0 3px 4px rgba(255, 255, 255, 0.2));
+        .project-tech i:hover {
+            transform: scale(1.2);
+            background: linear-gradient(
+                45deg,
+                #999 5%,
+                #fff 10%,
+                #ccc 30%,
+                #ddd 50%,
+                #ccc 70%,
+                #fff 80%,
+                #999 95%
+            );
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            box-shadow: 0 4px 10px rgba(192, 192, 192, 0.4);
         }
         
         .project-banner {
@@ -151,24 +162,6 @@
             transform: scale(1.05);
         }
         
-        /* Custom styling for specific logos */
-        .project-tech img[alt="SQL"] {
-            background-color: rgba(0, 0, 0, 0.6);
-            padding: 5px;
-            border-radius: 6px;
-        }
-
-        .project-tech img[alt="Python"] {
-            mix-blend-mode: screen;
-        }
-
-        .project-tech img[alt="Tableau"] {
-            mix-blend-mode: screen;
-        }
-
-        .project-tech img[alt="Excel"] {
-            mix-blend-mode: screen;
-        }
         
         /* Add scroll progress indicator */
         .scroll-progress {
@@ -196,8 +189,13 @@
     <!-- Navigation -->
     <nav class="navbar">
         <div class="nav-brand"></div>
+        <div class="mobile-menu-toggle">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
         <ul class="nav-links">
-            <li><a href="../index.html#home">Home</a></li>
+            <li><a href="../index.html">Home</a></li>
             <li><a href="../index.html#about">About</a></li>
             <li><a href="../index.html#projects">Projects</a></li>
             <li><a href="../index.html#contact">Contact</a></li>
@@ -210,8 +208,8 @@
             <div class="project-header">
                 <h1>Automated ETL Pipeline</h1>
                 <div class="project-tech">
-                    <img src="../python.webp" alt="Python" title="Python">
-                    <img src="../SQL.jpg" alt="SQL" title="SQL">
+                    <i class="fab fa-python" title="Python"></i>
+                    <i class="fas fa-database" title="SQL"></i>
                 </div>
             </div>
             

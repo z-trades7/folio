@@ -2,7 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>Predictive Revenue Model - Zach Lee</title>
     <link rel="stylesheet" href="../styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -48,23 +50,32 @@
             margin: 1.5rem 0;
         }
         
-        .project-tech img {
-            width: 35px;
-            height: 35px;
-            object-fit: contain;
-            padding: 5px;
-            background-color: transparent;
-            border-radius: 5px;
-            filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.3));
-            mix-blend-mode: lighten;
-            backdrop-filter: brightness(1.1);
-            transition: transform 0.2s;
+        .project-tech i {
+            font-size: 36px;
+            color: #E8E8E8;
+            background-color: #1a1a1a;
+            padding: 12px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
         }
         
-        .project-tech img:hover {
-            transform: scale(1.15);
-            box-shadow: 0 3px 6px rgba(192, 192, 192, 0.3);
-            filter: drop-shadow(0 3px 4px rgba(255, 255, 255, 0.2));
+        .project-tech i:hover {
+            transform: scale(1.2);
+            background: linear-gradient(
+                45deg,
+                #999 5%,
+                #fff 10%,
+                #ccc 30%,
+                #ddd 50%,
+                #ccc 70%,
+                #fff 80%,
+                #999 95%
+            );
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            box-shadow: 0 4px 10px rgba(192, 192, 192, 0.4);
         }
         
         .project-banner {
@@ -151,24 +162,6 @@
             transform: scale(1.05);
         }
         
-        /* Custom styling for specific logos */
-        .project-tech img[alt="SQL"] {
-            background-color: rgba(0, 0, 0, 0.6);
-            padding: 5px;
-            border-radius: 6px;
-        }
-
-        .project-tech img[alt="Python"] {
-            mix-blend-mode: screen;
-        }
-
-        .project-tech img[alt="Tableau"] {
-            mix-blend-mode: screen;
-        }
-
-        .project-tech img[alt="Excel"] {
-            mix-blend-mode: screen;
-        }
         
         /* Add scroll progress indicator */
         .scroll-progress {
@@ -196,8 +189,13 @@
     <!-- Navigation -->
     <nav class="navbar">
         <div class="nav-brand"></div>
+        <div class="mobile-menu-toggle">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
         <ul class="nav-links">
-            <li><a href="../index.html#home">Home</a></li>
+            <li><a href="../index.html">Home</a></li>
             <li><a href="../index.html#about">About</a></li>
             <li><a href="../index.html#projects">Projects</a></li>
             <li><a href="../index.html#contact">Contact</a></li>
@@ -210,22 +208,42 @@
             <div class="project-header">
                 <h1>Predictive Revenue Model</h1>
                 <div class="project-tech">
-                    <img src="../python.webp" alt="Python" title="Python">
-                    <img src="../excel.png" alt="Excel" title="Excel">
-                    <img src="../tableau.webp" alt="Tableau" title="Tableau">
+                    <i class="fab fa-python" title="Python"></i>
+                    <i class="fas fa-file-excel" title="Excel"></i>
+                    <i class="fas fa-chart-bar" title="Tableau"></i>
                 </div>
             </div>
             
-            <img src="../finance2.jpg" alt="Predictive Revenue Model" class="project-banner">
+            <img src="../code.jpg" alt="Predictive Revenue Model" class="project-banner">
             
             <div class="project-section">
                 <h2>Overview</h2>
-                <p>A machine learning-based forecasting tool that predicts revenue trends based on historical data and market variables. Detailed project information coming soon.</p>
+                <p>A comprehensive multi-model revenue forecasting system built for NVIDIA using 10 years of financial data (2016-2025). This project combines statistical modeling, machine learning, and Monte Carlo simulation to predict future revenue across multiple scenarios. The analysis captures NVIDIA's exceptional growth trajectory from $5B to $131B in annual revenue—a 2,505% increase driven by the AI revolution—and projects potential outcomes through 2030.</p>
+                
+                <p>Using nine distinct forecasting methodologies including Gradient Boosting (achieving 0.03% MAPE), Random Forest, Exponential Smoothing, and Polynomial Regression, the system generates probabilistic forecasts ranging from conservative ($263B) to optimistic ($1,793B) for 2030. The model incorporates scenario analysis with Bull, Base, and Bear cases, alongside 1,000-iteration Monte Carlo simulations to quantify uncertainty and provide confidence intervals for strategic planning.</p>
             </div>
             
             <div class="project-section">
-                <h2>Methodology</h2>
-                <p>This project leverages Python's machine learning libraries, Excel for data preparation, and Tableau for visualization. Full methodology details coming soon.</p>
+                <h2>Forecast Assumptions & Interpretations</h2>
+                <p>The conservative forecasts ($263B - $480B by 2030) assume AI is reaching its law of diminishing returns, where current growth rates slow as the market matures, competition intensifies, and early adopters have already invested in AI infrastructure. This scenario reflects natural market saturation where exponential growth transitions to linear expansion as the technology becomes commoditized and pricing pressures increase.</p>
+                
+                <p>The aggressive forecasts ($1,793B - $4,392B by 2030) assume quantum computing will exponentially boost NVIDIA's revenue value by enabling breakthrough applications in drug discovery, financial modeling, cryptography, and AI model training that are impossible with classical computing. This paradigm shift would create entirely new markets and use cases, positioning NVIDIA's expertise in parallel processing and AI acceleration as critical infrastructure for the quantum-classical hybrid computing era. The bull case anticipates NVIDIA successfully pivoting to quantum-AI integration, maintaining its technological leadership, and capturing significant market share in this emerging multi-trillion dollar opportunity.</p>
+                
+                <p>The median probabilistic forecast ($784B) represents a balanced view where AI adoption continues steadily across industries without dramatic slowdown or quantum computing breakthroughs materializing within the forecast period. This scenario accounts for continued data center expansion, edge computing growth, and automotive AI applications while maintaining realistic competition from AMD, Intel, and custom chip manufacturers.</p>
+            </div>
+            
+            <div class="project-section">
+                <h2>Technical Implementation</h2>
+                <p>The backend architecture features modular Python components for data loading, forecasting, and scenario analysis. The data loader extracts and prepares financial metrics from income statements, balance sheets, and cash flow statements, calculating derived metrics like gross margin (63% avg), operating margin (34% avg), and historical CAGR (38.54%). The forecasting engine implements multiple regression techniques, ensemble machine learning models, and time series methods, with automated model validation using MAE, RMSE, MAPE, and R² metrics.</p>
+                
+                <p>The scenario analyzer generates Bull/Base/Bear forecasts with growth rates ranging from 30% to 102% CAGR, while the Monte Carlo simulator runs 1,000 iterations sampling from historical volatility to create probabilistic confidence bands. Visualizations are built with Matplotlib for static publication-quality charts and Plotly for interactive dashboards featuring multi-model comparisons, scenario analysis, confidence intervals, and model performance metrics. The entire analysis pipeline is orchestrated through a main script that generates comprehensive reports, exports CSV data, and creates an interactive HTML dashboard for exploration.</p>
+            </div>
+            
+            <div class="project-section" style="text-align: center; padding: 2rem; background: rgba(26, 26, 26, 0.6); border-radius: 10px;">
+                <a href="revenue_forecast_dashboard.html" style="display: inline-block; padding: 15px 40px; background: linear-gradient(45deg, #999, #fff); color: #1a1a1a; text-decoration: none; border-radius: 25px; border: 2px solid #C0C0C0; font-weight: bold; font-size: 1.3rem; box-shadow: 0 5px 15px rgba(192, 192, 192, 0.3); transition: all 0.3s;">
+                    <i class="fas fa-chart-line"></i> View Interactive Dashboard
+                </a>
+                <p style="margin-top: 1rem; color: #C0C0C0; text-align: center;">Explore forecasts, scenarios, and Monte Carlo simulations</p>
             </div>
             
             <a href="../index.html#projects" class="back-button">

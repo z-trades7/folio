@@ -1,34 +1,83 @@
+// Mobile menu toggle functionality
+const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
+const navLinks = document.querySelector('.nav-links');
+
+if (mobileMenuToggle) {
+    mobileMenuToggle.addEventListener('click', function() {
+        navLinks.classList.toggle('active');
+        // Animate hamburger menu
+        this.classList.toggle('active');
+        // Prevent body scroll on iOS when menu is open
+        document.body.classList.toggle('menu-open');
+    });
+}
+
+// Close mobile menu when clicking outside
+document.addEventListener('click', function(event) {
+    if (navLinks && navLinks.classList.contains('active')) {
+        const isClickInsideNav = navLinks.contains(event.target);
+        const isClickOnToggle = mobileMenuToggle && mobileMenuToggle.contains(event.target);
+        
+        if (!isClickInsideNav && !isClickOnToggle) {
+            navLinks.classList.remove('active');
+            if (mobileMenuToggle) {
+                mobileMenuToggle.classList.remove('active');
+            }
+            document.body.classList.remove('menu-open');
+        }
+    }
+});
+
 // Enhanced smooth scrolling for navigation links
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
         e.preventDefault();
+        
+        // Close mobile menu if open
+        if (navLinks.classList.contains('active')) {
+            navLinks.classList.remove('active');
+            if (mobileMenuToggle) {
+                mobileMenuToggle.classList.remove('active');
+            }
+            document.body.classList.remove('menu-open');
+        }
+        
         const targetId = this.getAttribute('href');
         const targetElement = document.querySelector(targetId);
         
         if (!targetElement) return;
         
-        const targetPosition = targetElement.getBoundingClientRect().top + window.pageYOffset;
-        const startPosition = window.pageYOffset;
-        const distance = targetPosition - startPosition;
-        const duration = 800; // ms
-        let start = null;
+        // iOS-friendly scrolling
+        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
         
-        function step(timestamp) {
-            if (!start) start = timestamp;
-            const progress = timestamp - start;
-            const percentage = Math.min(progress / duration, 1);
+        if (isIOS) {
+            // Use native smooth scroll on iOS for better performance
+            targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        } else {
+            // Custom smooth scroll for other devices
+            const targetPosition = targetElement.getBoundingClientRect().top + window.pageYOffset;
+            const startPosition = window.pageYOffset;
+            const distance = targetPosition - startPosition;
+            const duration = 800; // ms
+            let start = null;
             
-            // Easing function for smooth acceleration and deceleration
-            const easing = t => t < 0.5 ? 4 * t * t * t : (t - 1) * (2 * t - 2) * (2 * t - 2) + 1;
-            
-            window.scrollTo(0, startPosition + distance * easing(percentage));
-            
-            if (progress < duration) {
-                window.requestAnimationFrame(step);
+            function step(timestamp) {
+                if (!start) start = timestamp;
+                const progress = timestamp - start;
+                const percentage = Math.min(progress / duration, 1);
+                
+                // Easing function for smooth acceleration and deceleration
+                const easing = t => t < 0.5 ? 4 * t * t * t : (t - 1) * (2 * t - 2) * (2 * t - 2) + 1;
+                
+                window.scrollTo(0, startPosition + distance * easing(percentage));
+                
+                if (progress < duration) {
+                    window.requestAnimationFrame(step);
+                }
             }
+            
+            window.requestAnimationFrame(step);
         }
-        
-        window.requestAnimationFrame(step);
     });
 });
 
@@ -89,174 +138,50 @@ window.addEventListener('scroll', () => {
     scrollProgress.style.width = `${progress}%`;
 });
 
-// Function to toggle between image logos and Font Awesome icons
-function createLogoToggleButton() {
-    // Create the toggle button
-    const toggleButton = document.createElement('button');
-    toggleButton.textContent = 'Try Icon Style Logos';
-    toggleButton.className = 'logo-toggle-btn';
-    toggleButton.style.position = 'fixed';
-    toggleButton.style.bottom = '20px';
-    toggleButton.style.right = '20px';
-    toggleButton.style.padding = '8px 12px';
-    toggleButton.style.backgroundColor = '#333';
-    toggleButton.style.color = '#E8E8E8';
-    toggleButton.style.border = '1px solid #C0C0C0';
-    toggleButton.style.borderRadius = '4px';
-    toggleButton.style.cursor = 'pointer';
-    toggleButton.style.zIndex = '1000';
-    toggleButton.style.fontFamily = '-apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Helvetica Neue", Arial, sans-serif';
-    toggleButton.style.fontSize = '0.9rem';
-    toggleButton.style.boxShadow = '0 2px 5px rgba(0,0,0,0.3)';
-    
-    // Add hover effect
-    toggleButton.addEventListener('mouseenter', () => {
-        toggleButton.style.backgroundColor = '#444';
-    });
-    
-    toggleButton.addEventListener('mouseleave', () => {
-        toggleButton.style.backgroundColor = '#333';
-    });
-    
-    // Add event listener
-    let usingIcons = false;
-    toggleButton.addEventListener('click', () => {
-        const techStacks = document.querySelectorAll('.tech-stack');
-        
-        if (!usingIcons) {
-            // Switch to Font Awesome icons
-            techStacks.forEach(stack => {
-                const icons = Array.from(stack.querySelectorAll('img'));
-                
-                // Save the original images
-                if (!stack.dataset.originalContent) {
-                    stack.dataset.originalContent = stack.innerHTML;
-                }
-                
-                // Replace with icons
-                let newContent = '';
-                icons.forEach(img => {
-                    const tech = img.getAttribute('alt');
-                    if (tech === 'Python') {
-                        newContent += '<i class="fab fa-python" title="Python"></i>';
-                    } else if (tech === 'SQL') {
-                        newContent += '<i class="fas fa-database" title="SQL"></i>';
-                    } else if (tech === 'Tableau') {
-                        newContent += '<i class="fas fa-chart-bar" title="Tableau"></i>';
-                    } else if (tech === 'Excel') {
-                        newContent += '<i class="fas fa-file-excel" title="Excel"></i>';
-                    }
-                });
-                
-                stack.innerHTML = newContent;
-            });
-            
-            toggleButton.textContent = 'Restore Image Logos';
-            usingIcons = true;
-        } else {
-            // Switch back to original images
-            techStacks.forEach(stack => {
-                if (stack.dataset.originalContent) {
-                    stack.innerHTML = stack.dataset.originalContent;
-                }
-            });
-            
-            toggleButton.textContent = 'Try Icon Style Logos';
-            usingIcons = false;
-        }
-    });
-    
-    document.body.appendChild(toggleButton);
-}
 
-// Enhanced interactions for project cards
+// Enhanced interactions for project cards with iOS touch support
 document.addEventListener('DOMContentLoaded', () => {
     const projectCards = document.querySelectorAll('.project-card');
     
-    // Enhance logo display
-    const techLogos = document.querySelectorAll('.tech-stack img');
-    techLogos.forEach(logo => {
-        // Add a slight border to help with visibility
-        logo.style.border = '1px solid rgba(255, 255, 255, 0.1)';
-        
-        // Handle specific logos with special treatments
-        if (logo.alt === 'SQL') {
-            logo.style.backgroundColor = 'rgba(0, 0, 0, 0.6)';
-        }
-        
-        // Add shimmer effect on hover
-        logo.addEventListener('mouseenter', () => {
-            logo.style.filter = 'drop-shadow(0 0 3px rgba(255, 255, 255, 0.4))';
-        });
-        
-        logo.addEventListener('mouseleave', () => {
-            logo.style.filter = 'drop-shadow(0 2px 3px rgba(0, 0, 0, 0.3))';
-        });
-    });
+    // Detect if device is iOS
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+    const isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
     
     projectCards.forEach(card => {
-        // Make whole card clickable
-        card.style.cursor = 'pointer';
-        
-        // Get the project URL from the View Project button, if it exists
-        let projectUrl = null;
-        const viewProjectLink = card.querySelector('.project-links a:first-child');
-        if (viewProjectLink) {
-            projectUrl = viewProjectLink.getAttribute('href');
+        // Enhance hover effects (only for non-touch devices)
+        if (!isTouchDevice) {
+            card.addEventListener('mouseenter', () => {
+                card.style.transform = 'translateY(-8px)';
+                
+                // Add subtle transition to tech stack icons
+                const techIcons = card.querySelectorAll('.tech-stack i');
+                techIcons.forEach((icon, index) => {
+                    setTimeout(() => {
+                        icon.style.transform = 'scale(1.15)';
+                    }, index * 50);
+                });
+            });
             
-            // Hide the project links div since the entire card is now clickable
-            const projectLinks = card.querySelector('.project-links');
-            if (projectLinks) {
-                projectLinks.style.display = 'none';
-            }
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'translateY(0)';
+                
+                // Reset tech stack icons
+                const techIcons = card.querySelectorAll('.tech-stack i');
+                techIcons.forEach(icon => {
+                    icon.style.transform = 'scale(1)';
+                });
+            });
         }
-        
-        // Add click event for the entire card
-        if (projectUrl) {
-            card.addEventListener('click', () => {
-                window.location.href = projectUrl;
-            });
-        }
-        
-        // Enhance hover effects
-        card.addEventListener('mouseenter', () => {
-            card.style.transform = 'translateY(-8px)';
-            
-            // Add subtle transition to tech stack icons
-            const techIcons = card.querySelectorAll('.tech-stack img, .tech-stack i');
-            techIcons.forEach((icon, index) => {
-                setTimeout(() => {
-                    icon.style.transform = 'scale(1.15)';
-                }, index * 50);
-            });
-        });
-        
-        card.addEventListener('mouseleave', () => {
-            card.style.transform = 'translateY(0)';
-            
-            // Reset tech stack icons
-            const techIcons = card.querySelectorAll('.tech-stack img, .tech-stack i');
-            techIcons.forEach(icon => {
-                icon.style.transform = 'scale(1)';
-            });
-        });
-        
-        // Add tooltip functionality for tech stack icons
-        const techIcons = card.querySelectorAll('.tech-stack img, .tech-stack i');
-        techIcons.forEach(icon => {
-            // Remove tooltip creation functionality
-            icon.addEventListener('mouseenter', () => {
-                icon.style.transform = 'scale(1.15)';
-                icon.style.filter = 'drop-shadow(0 0 3px rgba(255, 255, 255, 0.4))';
-            });
-            
-            icon.addEventListener('mouseleave', () => {
-                icon.style.transform = 'scale(1)';
-                icon.style.filter = 'drop-shadow(0 2px 3px rgba(0, 0, 0, 0.3))';
-            });
-        });
     });
     
-    // Add toggle button for logo style
-    createLogoToggleButton();
+    // Fix iOS viewport height issue
+    if (isIOS) {
+        const setVH = () => {
+            const vh = window.innerHeight * 0.01;
+            document.documentElement.style.setProperty('--vh', `${vh}px`);
+        };
+        setVH();
+        window.addEventListener('resize', setVH);
+        window.addEventListener('orientationchange', setVH);
+    }
 }); 

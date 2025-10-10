@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Stock Data Viewer</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            color: #E8E8E8;
+            min-height: 100vh;
+            padding: 2rem;
+        }
+        
+        .viewer-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding: 2rem;
+            background: rgba(26, 26, 26, 0.8);
+            border-radius: 15px;
+            border: 1px solid #C0C0C0;
+        }
+        
+        .header h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(45deg, #999, #fff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .controls {
+            background: rgba(42, 42, 42, 0.9);
+            padding: 1.5rem;
+            border-radius: 10px;
+            border: 1px solid #444;
+            margin-bottom: 2rem;
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            align-items: end;
+        }
+        
+        .control-group {
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        .control-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            color: #C0C0C0;
+        }
+        
+        select {
+            width: 100%;
+            padding: 0.75rem;
+            background-color: #2a2a2a;
+            border: 1px solid #C0C0C0;
+            border-radius: 5px;
+            color: #E8E8E8;
+            font-size: 1rem;
+        }
+        
+        button {
+            padding: 0.75rem 1.5rem;
+            background: linear-gradient(45deg, #999, #fff);
+            color: #1a1a1a;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(192, 192, 192, 0.3);
+        }
+        
+        .data-container {
+            background: rgba(42, 42, 42, 0.9);
+            padding: 1.5rem;
+            border-radius: 10px;
+            border: 1px solid #444;
+            margin-bottom: 2rem;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+        
+        th, td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid #444;
+        }
+        
+        th {
+            background-color: #2a2a2a;
+            font-weight: 600;
+            color: #C0C0C0;
+            position: sticky;
+            top: 0;
+        }
+        
+        tr:hover {
+            background-color: rgba(192, 192, 192, 0.1);
+        }
+        
+        .positive { color: #4CAF50; }
+        .negative { color: #f44336; }
+        
+        .info-box {
+            background: rgba(26, 26, 26, 0.6);
+            padding: 1rem;
+            border-radius: 8px;
+            border-left: 3px solid #C0C0C0;
+            margin-bottom: 1rem;
+        }
+        
+        .back-button {
+            display: inline-block;
+            margin-top: 2rem;
+            padding: 10px 20px;
+            background: linear-gradient(45deg, #333, #444);
+            color: #E8E8E8;
+            text-decoration: none;
+            border-radius: 20px;
+            border: 1px solid #C0C0C0;
+            transition: all 0.3s ease;
+        }
+        
+        .back-button:hover {
+            background: linear-gradient(45deg, #999, #fff);
+            color: #333;
+            transform: translateY(-2px);
+        }
+        
+        @media (max-width: 768px) {
+            body { padding: 1rem; }
+            .header h1 { font-size: 1.5rem; }
+            table { font-size: 0.85rem; }
+            th, td { padding: 0.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-brand"></div>
+        <div class="mobile-menu-toggle">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <ul class="nav-links">
+            <li><a href="../index.html">Home</a></li>
+            <li><a href="../index.html#about">About</a></li>
+            <li><a href="../index.html#projects">Projects</a></li>
+            <li><a href="../index.html#contact">Contact</a></li>
+        </ul>
+    </nav>
+
+    <div class="viewer-container">
+        <div class="header">
+            <h1><i class="fas fa-chart-line"></i> Stock Data Viewer</h1>
+            <p style="color: #C0C0C0;">Real-time 5-minute interval data</p>
+        </div>
+        
+        <div class="info-box">
+            <strong>Data Updated:</strong> <span id="last-updated">Loading...</span> | 
+            <strong>Symbols:</strong> <span id="symbol-count">8</span> | 
+            <strong>Status:</strong> <span style="color: #4CAF50;">● Auto-updating daily</span>
+        </div>
+        
+        <div class="controls">
+            <div class="control-group">
+                <label for="symbol-select"><i class="fas fa-chart-bar"></i> Symbol</label>
+                <select id="symbol-select" onchange="loadData()">
+                    <option value="SPY">SPY - S&P 500</option>
+                    <option value="QQQ">QQQ - NASDAQ 100</option>
+                    <option value="AAPL">AAPL - Apple</option>
+                    <option value="MSFT">MSFT - Microsoft</option>
+                    <option value="GOOGL">GOOGL - Google</option>
+                    <option value="TSLA">TSLA - Tesla</option>
+                    <option value="NVDA">NVDA - NVIDIA</option>
+                    <option value="AMZN">AMZN - Amazon</option>
+                </select>
+            </div>
+            
+            <div class="control-group">
+                <label for="period-select"><i class="fas fa-clock"></i> Time Period</label>
+                <select id="period-select" onchange="loadData()">
+                    <option value="1">Last 1 day</option>
+                    <option value="7">Last 1 week</option>
+                    <option value="30">Last 1 month</option>
+                    <option value="90">Last 3 months</option>
+                    <option value="180">Last 6 months</option>
+                    <option value="365">Last 1 year</option>
+                    <option value="999999" selected>All available</option>
+                </select>
+            </div>
+            
+            <div class="control-group" style="flex: 0;">
+                <button onclick="downloadCSV()">
+                    <i class="fas fa-download"></i> Download CSV
+                </button>
+            </div>
+        </div>
+        
+        <div class="data-container">
+            <h3 style="margin-bottom: 1rem;">
+                <span id="data-title">SPY Data</span>
+                <span style="float: right; font-size: 0.9rem; color: #C0C0C0;">
+                    <span id="record-count">0</span> records
+                </span>
+            </h3>
+            <div style="overflow-x: auto;">
+                <table id="data-table">
+                    <thead>
+                        <tr>
+                            <th>Timestamp</th>
+                            <th>Open</th>
+                            <th>High</th>
+                            <th>Low</th>
+                            <th>Close</th>
+                            <th>Volume</th>
+                            <th>Change %</th>
+                        </tr>
+                    </thead>
+                    <tbody id="data-body">
+                        <tr>
+                            <td colspan="7" style="text-align: center; padding: 2rem; color: #C0C0C0;">
+                                Loading data...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <a href="market-analysis-dashboard.html" class="back-button">
+            <i class="fas fa-arrow-left"></i> Back to Project
+        </a>
+    </div>
+    
+    <script src="../script.js"></script>
+    <script>
+        let stockData = {};
+        let currentData = [];
+        
+        // Load data on page load
+        fetch('stock_data.json')
+            .then(response => response.json())
+            .then(data => {
+                stockData = data;
+                document.getElementById('last-updated').textContent = 
+                    new Date(data.stats.last_updated).toLocaleString();
+                loadData();
+            })
+            .catch(error => {
+                document.getElementById('data-body').innerHTML = 
+                    '<tr><td colspan="7" style="text-align: center; color: #f44336;">Error loading data. Run data_collector.py first.</td></tr>';
+            });
+        
+        function loadData() {
+            const symbol = document.getElementById('symbol-select').value;
+            const days = parseInt(document.getElementById('period-select').value);
+            
+            if (!stockData.data || !stockData.data[symbol]) {
+                document.getElementById('data-body').innerHTML = 
+                    '<tr><td colspan="7" style="text-align: center; color: #C0C0C0;">No data available</td></tr>';
+                return;
+            }
+            
+            let data = stockData.data[symbol];
+            
+            // Filter by days instead of record count
+            if (days < 999999) {
+                const cutoffDate = new Date();
+                cutoffDate.setDate(cutoffDate.getDate() - days);
+                data = data.filter(record => new Date(record.timestamp) >= cutoffDate);
+            }
+            
+            currentData = data;
+            
+            document.getElementById('data-title').textContent = `${symbol} Data`;
+            document.getElementById('record-count').textContent = currentData.length;
+            
+            let html = '';
+            currentData.forEach((record, index) => {
+                const change = index < currentData.length - 1 ? 
+                    ((record.close - currentData[index + 1].close) / currentData[index + 1].close * 100).toFixed(2) : '0.00';
+                const changeClass = change >= 0 ? 'positive' : 'negative';
+                
+                html += '<tr>';
+                html += `<td>${new Date(record.timestamp).toLocaleString()}</td>`;
+                html += `<td>$${record.open.toFixed(2)}</td>`;
+                html += `<td>$${record.high.toFixed(2)}</td>`;
+                html += `<td>$${record.low.toFixed(2)}</td>`;
+                html += `<td>$${record.close.toFixed(2)}</td>`;
+                html += `<td>${record.volume.toLocaleString()}</td>`;
+                html += `<td class="${changeClass}">${change >= 0 ? '+' : ''}${change}%</td>`;
+                html += '</tr>';
+            });
+            
+            document.getElementById('data-body').innerHTML = html || 
+                '<tr><td colspan="7" style="text-align: center;">No data</td></tr>';
+        }
+        
+        function downloadCSV() {
+            if (currentData.length === 0) {
+                alert('No data to download');
+                return;
+            }
+            
+            const symbol = document.getElementById('symbol-select').value;
+            
+            // Create CSV
+            let csv = 'Timestamp,Open,High,Low,Close,Volume\n';
+            currentData.forEach(record => {
+                csv += `${record.timestamp},${record.open},${record.high},${record.low},${record.close},${record.volume}\n`;
+            });
+            
+            // Download
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${symbol}_data_${new Date().toISOString().split('T')[0]}.csv`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+        }
+    </script>
+</body>
+</html>
+

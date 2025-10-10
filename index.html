@@ -2,7 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>Zach Lee - Portfolio</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -11,6 +13,11 @@
     <!-- Navigation -->
     <nav class="navbar">
         <div class="nav-brand"></div>
+        <div class="mobile-menu-toggle">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
         <ul class="nav-links">
             <li><a href="#home">Home</a></li>
             <li><a href="#about">About</a></li>
@@ -27,7 +34,7 @@
                 <img src="headshot.jpg" alt="Zach Lee" class="headshot">
             </div>
             <h1>Hi, I'm <span class="highlight">Zach Lee</span></h1>
-            <p class="tagline">Full Stack Developer | Analyst | Finance BA</p>
+            <p class="tagline">Full Stack Developer | Finance BA</p>
             <div class="cta-buttons">
                 <a href="#projects" class="btn primary">View My Work</a>
                 <a href="#contact" class="btn secondary">Contact Me</a>
@@ -41,34 +48,11 @@
         <div class="about-content">
             <div class="about-grid">
                 <div class="about-text">
-                    <p>I am a passionate analyst and developer with a remarkable ability to learn efficiently. My adaptive learning approach has enabled me to master complex technical skills quickly and apply them to real-world challenges. I thrive in dynamic environments where I can leverage data to drive strategic decisions. With a background in Finance and a forward-thinking mindset, I bring both analytical rigor and creative problem-solving to every project.</p>
+                    <p>I've been drawn to mathematics since high school, where I first saw how numbers could solve real problems. As a baseball player, I learned what it means to work as part of a team—showing up every day, supporting teammates, and pushing through challenges together. Those experiences taught me that success rarely comes from individual effort alone.</p>
                     
-                    <p>My greatest strength lies in connecting theoretical knowledge with practical application, turning complex data into actionable insights that drive business value. I continuously seek opportunities to expand my skill set and tackle new challenges that push the boundaries of what's possible.</p>
+                    <p>I'm currently pursuing my bachelor's degree in finance, where I've found that the most meaningful learning happens when I dig into topics on my own. This led me to coding and web development, which turned into something I genuinely enjoy. I focus on building complex projects that solve real-world problems, combining technical skills with practical applications.</p>
                     
-                    <div class="skills">
-                        <div class="skill-tags">
-                            <span>SQL</span>
-                            <span>Python</span>
-                            <span>Tableau</span>
-                            <span>Data Analytics</span>
-                            <span>Financial Valuations</span>
-                            <span>Excel</span>
-                            <span>Business Intelligence</span>
-                            <span>Data Visualization</span>
-                            <span>HTML</span>
-                            <span>CSS</span>
-                            <span>JavaScript</span>
-                            <span>Communication</span>
-                            <span>Problem-Solving</span>
-                            <span>Critical Thinking</span>
-                            <span>Leadership</span>
-                            <span>Adaptability</span>
-                            <span>Strategic Thinking</span>
-                            <span>Teamwork</span>
-                            <span>Resilience</span>
-                            <span>Project Management</span>
-                        </div>
-                    </div>
+                    <p>My coursework has given me a solid foundation in financial principles—from analyzing financial statements and conducting sensitivity analysis to evaluating capital budgeting decisions. I work with Python, SQL, and web technologies to apply these concepts in practical ways. Outside of coursework and coding, I spend time outdoors, help others when I can, and have a soft spot for animals. These keep me balanced and often provide perspective when I'm stuck on a problem.</p>
                 </div>
             </div>
         </div>
@@ -81,144 +65,37 @@
             <!-- Project Card 1: Data Analysis -->
             <div class="project-card">
                 <div class="project-image">
-                    <img src="marketanalysisdashboard.png" alt="Market Analysis Dashboard">
+                    <img src="DataWarehouse.jpg" alt="Stock Data Warehouse">
                 </div>
                 <div class="project-info">
-                    <h3>Market Analysis Dashboard</h3>
-                    <p>An interactive dashboard analyzing market trends and customer behavior patterns, providing actionable insights for strategic decision-making.</p>
+                    <h3>Stock Data Warehouse</h3>
+                    <p>Automated system collecting 60 days of real 5-minute stock data via Polygon.io API. 63,000+ records stored in SQLite with an interactive web viewer and CSV export.</p>
                     <div class="tech-stack">
-                        <img src="python.webp" alt="Python" title="Python">
-                        <img src="tableau.webp" alt="Tableau" title="Tableau">
-                        <img src="SQL.jpg" alt="SQL" title="SQL">
-                        <!-- 
-                        Alternative: Use Font Awesome icons for a cleaner look:
                         <i class="fab fa-python" title="Python"></i>
                         <i class="fas fa-database" title="SQL"></i>
                         <i class="fas fa-chart-bar" title="Tableau"></i>
-                        <i class="fas fa-file-excel" title="Excel"></i>
-                        -->
                     </div>
                     <div class="project-links">
                         <a href="project_pages/market-analysis-dashboard.html" target="_blank">View Project</a>
-                        <a href="project_pages/market-analysis-dashboard.html#methodology" target="_blank">Methodology</a>
                     </div>
                 </div>
             </div>
             
-            <!-- Project Card 2: Financial Analysis -->
+            <!-- Project Card 2: Predictive Revenue Model -->
             <div class="project-card">
                 <div class="project-image">
-                    <img src="finance.jpg" alt="Financial Analysis Project">
-                </div>
-                <div class="project-info">
-                    <h3>Financial Modeling Suite</h3>
-                    <p>A comprehensive financial model for valuations and forecasting, incorporating multiple scenarios and sensitivity analysis.</p>
-                    <div class="tech-stack">
-                        <img src="excel.png" alt="Excel" title="Excel">
-                        <img src="python.webp" alt="Python" title="Python">
-                    </div>
-                    <div class="project-links">
-                        <a href="project_pages/financial-modeling-suite.html" target="_blank">View Project</a>
-                        <a href="project_pages/financial-modeling-suite.html#methodology" target="_blank">Case Study</a>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Project Card 3: Data Pipeline -->
-            <div class="project-card">
-                <div class="project-image">
-                    <img src="data.jpg" alt="Data Pipeline Project">
-                </div>
-                <div class="project-info">
-                    <h3>Automated ETL Pipeline</h3>
-                    <p>Developed an automated data pipeline for extracting, transforming, and loading data from multiple sources into a centralized warehouse.</p>
-                    <div class="tech-stack">
-                        <img src="python.webp" alt="Python" title="Python">
-                        <img src="SQL.jpg" alt="SQL" title="SQL">
-                    </div>
-                    <div class="project-links">
-                        <a href="project_pages/automated-etl-pipeline.html" target="_blank">View Project</a>
-                        <a href="project_pages/automated-etl-pipeline.html#methodology" target="_blank">Documentation</a>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Project Card 4: Web Dashboard -->
-            <div class="project-card">
-                <div class="project-image">
-                    <img src="code.jpg" alt="Web Dashboard Project">
-                </div>
-                <div class="project-info">
-                    <h3>Interactive Analytics Portal</h3>
-                    <p>A web-based dashboard providing real-time analytics and visualization of key business metrics for executive decision-making.</p>
-                    <div class="tech-stack">
-                        <img src="tableau.webp" alt="Tableau" title="Tableau">
-                        <img src="SQL.jpg" alt="SQL" title="SQL">
-                    </div>
-                    <div class="project-links">
-                        <a href="project_pages/analytics-portal.html" target="_blank">View Project</a>
-                        <a href="project_pages/analytics-portal.html#impact" target="_blank">Case Study</a>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Project Card 5: Financial Forecasting -->
-            <div class="project-card">
-                <div class="project-image">
-                    <img src="finance2.jpg" alt="Forecasting Project">
+                    <img src="code.jpg" alt="Forecasting Project">
                 </div>
                 <div class="project-info">
                     <h3>Predictive Revenue Model</h3>
-                    <p>A machine learning-based forecasting tool that predicts revenue trends based on historical data and market variables.</p>
+                    <p>Multi-model forecasting system for NVIDIA using 9 methodologies, Monte Carlo simulation, and scenario analysis. Features interactive dashboard with quantum computing and AI diminishing returns scenarios.</p>
                     <div class="tech-stack">
-                        <img src="python.webp" alt="Python" title="Python">
-                        <img src="excel.png" alt="Excel" title="Excel">
-                        <img src="tableau.webp" alt="Tableau" title="Tableau">
+                        <i class="fab fa-python" title="Python"></i>
+                        <i class="fas fa-file-excel" title="Excel"></i>
+                        <i class="fas fa-chart-bar" title="Tableau"></i>
                     </div>
                     <div class="project-links">
                         <a href="project_pages/predictive-revenue-model.html" target="_blank">View Project</a>
-                        <a href="project_pages/predictive-revenue-model.html#methodology" target="_blank">Methodology</a>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Project Card 6: Data Visualization -->
-            <div class="project-card">
-                <div class="project-image">
-                    <img src="analysis.jpg" alt="Visualization Project">
-                </div>
-                <div class="project-info">
-                    <h3>Data Storytelling Platform</h3>
-                    <p>An interactive data visualization platform that transforms complex datasets into compelling visual narratives for stakeholder presentations.</p>
-                    <div class="tech-stack">
-                        <img src="tableau.webp" alt="Tableau" title="Tableau">
-                        <img src="python.webp" alt="Python" title="Python">
-                        <img src="SQL.jpg" alt="SQL" title="SQL">
-                    </div>
-                    <div class="project-links">
-                        <a href="project_pages/data-storytelling-platform.html" target="_blank">View Project</a>
-                        <a href="project_pages/data-storytelling-platform.html#features" target="_blank">Project Details</a>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Example Card with Font Awesome Icons (hidden by default) -->
-            <div class="project-card" style="display: none;">
-                <div class="project-image">
-                    <img src="mountain.jpg" alt="Example Project">
-                </div>
-                <div class="project-info">
-                    <h3>Example with Icon Alternative</h3>
-                    <p>This card demonstrates using Font Awesome icons instead of images with backgrounds for a cleaner look.</p>
-                    <div class="tech-stack">
-                        <i class="fab fa-python" title="Python"></i>
-                        <i class="fas fa-database" title="SQL"></i>
-                        <i class="fas fa-chart-bar" title="Tableau"></i>
-                        <i class="fas fa-file-excel" title="Excel"></i>
-                    </div>
-                    <div class="project-links">
-                        <a href="#" target="_blank">View Example</a>
-                        <a href="#" target="_blank">Learn More</a>
                     </div>
                 </div>
             </div>
@@ -231,10 +108,9 @@
         <div class="contact-content">
             <div class="social-links">
                 <a href="https://www.linkedin.com/in/zach-lee-b76799308/" target="_blank" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
-                <a href="https://x.com/lee__zach" target="_blank" title="X (Twitter)"><i class="fab fa-twitter"></i></a>
-                <a href="mailto:zachary__lee@outlook.com" title="Email"><i class="fas fa-envelope"></i></a>
+                <a href="mailto:zach-lee7@outlook.com" title="Email"><i class="fas fa-envelope"></i></a>
             </div>
-            <p class="contact-text">Feel free to connect with me on social media or send me an email.</p>
+            <p class="contact-text">Feel free to connect with me on LinkedIn or send me an email.</p>
         </div>
     </section>
 
@@ -246,3 +122,7 @@
     <script src="script.js"></script>
 </body>
 </html> 
+
+
+
+

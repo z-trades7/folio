@@ -2,7 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>Market Analysis Dashboard - Zach Lee</title>
     <link rel="stylesheet" href="../styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -16,7 +18,7 @@
             ), url('../zion.jpg');
             background-size: cover;
             background-position: center;
-            background-attachment: fixed;
+            /* iOS Safari fix: background-attachment fixed doesn't work on iOS */
             color: #E8E8E8;
         }
         
@@ -48,23 +50,32 @@
             margin: 1.5rem 0;
         }
         
-        .project-tech img {
-            width: 35px;
-            height: 35px;
-            object-fit: contain;
-            padding: 5px;
-            background-color: transparent;
-            border-radius: 5px;
-            filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.3));
-            mix-blend-mode: lighten;
-            backdrop-filter: brightness(1.1);
-            transition: transform 0.2s;
+        .project-tech i {
+            font-size: 36px;
+            color: #E8E8E8;
+            background-color: #1a1a1a;
+            padding: 12px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
         }
         
-        .project-tech img:hover {
-            transform: scale(1.15);
-            box-shadow: 0 3px 6px rgba(192, 192, 192, 0.3);
-            filter: drop-shadow(0 3px 4px rgba(255, 255, 255, 0.2));
+        .project-tech i:hover {
+            transform: scale(1.2);
+            background: linear-gradient(
+                45deg,
+                #999 5%,
+                #fff 10%,
+                #ccc 30%,
+                #ddd 50%,
+                #ccc 70%,
+                #fff 80%,
+                #999 95%
+            );
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            box-shadow: 0 4px 10px rgba(192, 192, 192, 0.4);
         }
         
         .project-banner {
@@ -151,25 +162,6 @@
             transform: scale(1.05);
         }
         
-        /* Custom styling for specific logos */
-        .project-tech img[alt="SQL"] {
-            background-color: rgba(0, 0, 0, 0.6);
-            padding: 5px;
-            border-radius: 6px;
-        }
-
-        .project-tech img[alt="Python"] {
-            mix-blend-mode: screen;
-        }
-
-        .project-tech img[alt="Tableau"] {
-            mix-blend-mode: screen;
-        }
-
-        .project-tech img[alt="Excel"] {
-            mix-blend-mode: screen;
-        }
-        
         /* Add scroll progress indicator */
         .scroll-progress {
             position: fixed;
@@ -196,8 +188,13 @@
     <!-- Navigation -->
     <nav class="navbar">
         <div class="nav-brand"></div>
+        <div class="mobile-menu-toggle">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
         <ul class="nav-links">
-            <li><a href="../index.html#home">Home</a></li>
+            <li><a href="../index.html">Home</a></li>
             <li><a href="../index.html#about">About</a></li>
             <li><a href="../index.html#projects">Projects</a></li>
             <li><a href="../index.html#contact">Contact</a></li>
@@ -210,65 +207,33 @@
             <div class="project-header">
                 <h1>Market Analysis Dashboard</h1>
                 <div class="project-tech">
-                    <img src="../python.webp" alt="Python" title="Python">
-                    <img src="../tableau.webp" alt="Tableau" title="Tableau">
-                    <img src="../SQL.jpg" alt="SQL" title="SQL">
+                    <i class="fab fa-python" title="Python"></i>
+                    <i class="fas fa-chart-bar" title="Tableau"></i>
+                    <i class="fas fa-database" title="SQL"></i>
                 </div>
             </div>
             
-            <img src="../marketanalysisdashboard.png" alt="Market Analysis Dashboard" class="project-banner">
+            <img src="../DataWarehouse.jpg" alt="Stock Data Warehouse" class="project-banner">
             
             <div class="project-section">
                 <h2>Overview</h2>
-                <p>The Market Analysis Dashboard is an interactive business intelligence solution designed to analyze market trends and customer behavior patterns. By aggregating data from multiple sources, this dashboard provides actionable insights for strategic decision-making, enabling businesses to identify opportunities and respond to market changes in real-time.</p>
-                <p>This project was developed to address the challenge of transforming large volumes of disparate market data into a cohesive, intuitive interface that stakeholders across the organization could leverage for informed decision-making.</p>
+                <p>As a student and beginner trader, I faced significant challenges accessing large intraday datasets for analysis and learning. Most providers charge substantial fees or severely limit free-tier access, making it difficult to build meaningful trading skills. This inspired me to create a production-grade automated data warehouse that continuously collects 5-minute interval OHLCV data for major stocks and ETFs, making quality intraday data freely accessible to others facing the same barriers.</p>
+                
+                <p>The system leverages the Polygon.io API to autonomously collect data for 8 major symbols (SPY, QQQ, AAPL, MSFT, GOOGL, TSLA, NVDA, AMZN) and stores it in an optimized SQLite database. A background scheduler runs daily at 5:30 PM ET, intelligently fetching only new records since the last collection while automatically skipping weekends. Starting with 60 days of historical data, the dataset grows continuously and will exceed 400 days in its first year. Users can explore the 63,232+ records through an interactive web viewer with flexible time-range filtering and CSV export capabilities.</p>
             </div>
             
             <div class="project-section">
-                <h2>Methodology</h2>
-                <p>The development of this dashboard followed a comprehensive data pipeline approach:</p>
-                <ol>
-                    <li>Data Collection: Utilized Python scripts to extract data from various sources including CRM systems, sales databases, and third-party market research APIs.</li>
-                    <li>Data Cleaning & Transformation: Implemented SQL procedures to clean, normalize, and prepare the data for analysis, ensuring consistency and accuracy.</li>
-                    <li>Analysis & Modeling: Applied statistical methods and predictive modeling techniques using Python libraries (Pandas, NumPy, Scikit-learn) to identify patterns and generate insights.</li>
-                    <li>Visualization Development: Created an interactive dashboard using Tableau, with careful attention to UX design principles for optimal user engagement and information clarity.</li>
-                    <li>Deployment & Automation: Set up an automated data refresh pipeline to ensure the dashboard always displays the most current information available.</li>
-                </ol>
+                <h2>Technical Implementation</h2>
+                <p>The backend is built with Python, utilizing the requests library for API communication, pandas for data manipulation, and SQLite for storage with indexed timestamps and UNIQUE constraints to prevent duplicates. The automation layer uses the schedule library for task scheduling and runs as a background process that requires zero manual intervention after initial setup. The system detects existing data and only fetches missing records, automatically adjusting date ranges for incremental updates while respecting API rate limits to ensure continuous operation.</p>
+                
+                <p>The frontend consists of a responsive HTML5/CSS3/JavaScript web viewer that dynamically loads data from JSON exports, allowing users to filter by symbol and select time ranges from one day to one year or view all available data. The data pipeline flows seamlessly from API through the incremental collector into SQLite, then exports to JSON for web consumption. Error handling, logging, and intelligent retry logic ensure robust operation under real-world conditions.</p>
             </div>
             
-            <div class="project-section">
-                <h2>Key Features</h2>
-                <p>The Market Analysis Dashboard includes several innovative features that set it apart:</p>
-                <ul>
-                    <li>Real-time Data Integration: Continuous data updates ensure that all visualizations reflect the most current market conditions.</li>
-                    <li>Interactive Filtering: Users can dynamically segment data by product category, geographic region, time period, and customer demographics.</li>
-                    <li>Predictive Trend Analysis: Machine learning algorithms identify emerging trends before they become apparent in traditional analyses.</li>
-                    <li>Competitor Benchmarking: Side-by-side comparison metrics highlight competitive positioning and market share dynamics.</li>
-                    <li>Anomaly Detection: Automated alerts flag unusual patterns that may represent either threats or opportunities.</li>
-                </ul>
-            </div>
-            
-            <div class="project-section">
-                <h2>Results & Impact</h2>
-                <p>Implementation of the Market Analysis Dashboard has generated substantial business value:</p>
-                <ul>
-                    <li>15% reduction in response time to market changes</li>
-                    <li>23% increase in successful product launches</li>
-                    <li>8% improvement in market share across key segments</li>
-                    <li>Democratized access to market intelligence across 5 departments</li>
-                    <li>Over $2.3M in ROI through optimized marketing spend and improved strategic decision-making</li>
-                </ul>
-            </div>
-            
-            <div class="project-section">
-                <h2>Technologies Used</h2>
-                <ul>
-                    <li><strong>Python:</strong> Pandas, NumPy, scikit-learn, Matplotlib, Seaborn, SQLAlchemy</li>
-                    <li><strong>SQL:</strong> PostgreSQL, query optimization, stored procedures</li>
-                    <li><strong>Tableau:</strong> Interactive dashboards, custom visualizations, parameter actions</li>
-                    <li><strong>ETL Pipeline:</strong> Apache Airflow for workflow orchestration</li>
-                    <li><strong>Cloud Services:</strong> AWS for hosting and computation</li>
-                </ul>
+            <div class="project-section" style="text-align: center; padding: 2rem; background: rgba(26, 26, 26, 0.6); border-radius: 10px;">
+                <a href="stock-data-viewer.html" style="display: inline-block; padding: 15px 40px; background: linear-gradient(45deg, #999, #fff); color: #1a1a1a; text-decoration: none; border-radius: 25px; border: 2px solid #C0C0C0; font-weight: bold; font-size: 1.3rem; box-shadow: 0 5px 15px rgba(192, 192, 192, 0.3); transition: all 0.3s;">
+                    <i class="fas fa-database"></i> View Live Data
+                </a>
+                <p style="margin-top: 1rem; color: #C0C0C0; text-align: center;">Browse collected data and download as CSV</p>
             </div>
             
             <a href="../index.html#projects" class="back-button">
