@@ -15,10 +15,11 @@ __pycache__/
 venv/
 env/
 
-# Stock Data System - Database and data files
+# Stock Data System - Database files only (JSON should be tracked)
 stock_data_system/data/*.db
 stock_data_system/data/*.json
-project_pages/stock_data.json
+stock_data_system/*.log
+stock_data_system/*.pid
 
 # Revenue Model - Data files
 revenue_model/data/
@@ -27,7 +28,4 @@ revenue_model/*.html
 
 # Excel and CSV files (personal data)
 *.xlsx
-*.csv
-
-# Large image files
-headshot.jpg 
+*.csv 
