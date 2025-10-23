@@ -82,7 +82,8 @@ class IncrementalStockCollector:
             
             if response.status_code == 200:
                 data = response.json()
-                if data.get('status') == 'OK' and data.get('resultsCount', 0) > 0:
+                # Accept both 'OK' and 'DELAYED' status (delayed data is still valid)
+                if data.get('status') in ['OK', 'DELAYED'] and data.get('resultsCount', 0) > 0:
                     return data.get('results', [])
                 else:
                     return []
