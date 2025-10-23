@@ -263,8 +263,8 @@
         let stockData = {};
         let currentData = [];
         
-        // Load data on page load
-        fetch('stock_data.json')
+        // Load data on page load (with cache-busting to ensure fresh data)
+        fetch(`stock_data.json?t=${Date.now()}`)
             .then(response => response.json())
             .then(data => {
                 stockData = data;

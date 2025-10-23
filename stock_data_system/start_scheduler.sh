@@ -6,8 +6,8 @@ cd "$(dirname "$0")"
 # Kill any existing scheduler processes
 pkill -f "daily_scheduler.py"
 
-# Start the scheduler in the background
-nohup python3 daily_scheduler.py > scheduler.log 2>&1 &
+# Start the scheduler in the background (unbuffered for immediate log updates)
+nohup python3 -u daily_scheduler.py > scheduler.log 2>&1 &
 
 # Get the process ID
 PID=$!

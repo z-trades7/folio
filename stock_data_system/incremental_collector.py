@@ -9,6 +9,8 @@ import pandas as pd
 from datetime import datetime, timedelta
 import time
 import json
+import subprocess
+import os
 import config
 
 
@@ -186,6 +188,9 @@ class IncrementalStockCollector:
         
         # Export to JSON for web viewer
         self.export_to_json()
+        
+        # Automatically push to GitHub
+        self.git_push_changes()
     
     def export_to_json(self):
         """Export latest data to JSON for web viewer"""
@@ -257,6 +262,75 @@ class IncrementalStockCollector:
             
         except Exception as e:
             print(f"✗ Export error: {e}")
+    
+    def git_push_changes(self):
+        """Automatically commit and push changes to GitHub"""
+        try:
+            # Save current directory
+            original_dir = os.getcwd()
+            
+            # Change to project root directory
+            project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+            os.chdir(project_root)
+            
+            # Check if there are changes to commit
+            result = subprocess.run(
+                ['git', 'status', '--porcelain', 'project_pages/stock_data.json'],
+                capture_output=True,
+                text=True,
+                timeout=10
+            )
+            
+            if not result.stdout.strip():
+                print("ℹ No changes to push (data already up to date)")
+                return True
+            
+            print("\n📤 Pushing changes to GitHub...")
+            
+            # Add the JSON file
+            subprocess.run(
+                ['git', 'add', 'project_pages/stock_data.json'],
+                check=True,
+                timeout=10
+            )
+            
+            # Commit with timestamp
+            commit_msg = f"Auto-update stock data: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
+            subprocess.run(
+                ['git', 'commit', '-m', commit_msg],
+                check=True,
+                timeout=10
+            )
+            
+            # Push to remote
+            subprocess.run(
+                ['git', 'push', 'origin', 'main'],
+                check=True,
+                timeout=30
+            )
+            
+            print("✓ Successfully pushed to GitHub!")
+            print("  Your GitHub Pages site will update in 1-2 minutes")
+            
+            # Restore original directory
+            os.chdir(original_dir)
+            return True
+            
+        except subprocess.TimeoutExpired:
+            print("✗ Git operation timed out")
+            os.chdir(original_dir)
+            return False
+        except subprocess.CalledProcessError as e:
+            print(f"✗ Git error: {e}")
+            os.chdir(original_dir)
+            return False
+        except Exception as e:
+            print(f"✗ Push failed: {e}")
+            try:
+                os.chdir(original_dir)
+            except:
+                pass
+            return False
     
     def get_stats(self):
         """Get database statistics"""
